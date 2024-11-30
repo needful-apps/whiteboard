@@ -16,7 +16,7 @@ export default class LRUCacheStrategy extends StorageStrategy {
 		this.apiService = apiService
 		this.cache = new LRUCache({
 			max: 1000,
-			ttl: 30 * 60 * 1000,
+			ttl: 10 * 1000,
 			ttlAutopurge: true,
 			dispose: async (value, key) => {
 				console.log(`[${key}] Disposing room`)
