@@ -152,15 +152,26 @@ export default class SocketManager {
 	}
 
 	async getUserSocketsAndIds(roomID) {
-		const sockets = await this.io.in(roomID).fetchSockets()
-		return Promise.all(sockets.map(async (s) => {
-			const data = await this.socketDataManager.getSocketData(s.id)
-			return {
-				socketId: s.id,
-				user: data.user,
-				userId: data.user.id,
+		let retries = 5
+		while (retries > 0) {
+			const sockets = await this.io.in(roomID).fetchSockets()
+			const result = await Promise.all(sockets.map(async (s) => {
+				const data = await this.socketDataManager.getSocketData(s.id)
+				if (!data || !data.user) return null
+				return {
+					socketId: s.id,
+					user: data.user,
+					userId: data.user.id,
+				}
+			}))
+
+			if (result.every(r => r !== null)) {
+				return result
 			}
-		}))
+
+			retries -= 1
+		}
+		throw new Error('Failed to fetch user sockets and ids after multiple retries')
 	}
 
 	async joinRoomHandler(socket, roomID) {
