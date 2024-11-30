@@ -11,5 +11,6 @@ namespace OCA\Whiteboard\Consts;
 
 final class JWTConsts {
 	public const JWT_ALGORITHM = 'HS256';
-	public const EXPIRATION_TIME = 87600 * 60 * 60; // 10 years
+	// on year exp time 
+	public const EXPIRATION_TIME = 31536000;
 }
