@@ -8,6 +8,7 @@
 import StorageStrategy from './StorageStrategy.js'
 import { LRUCache } from 'lru-cache'
 import Room from './Room.js'
+import Config from './Config.js'
 
 export default class LRUCacheStrategy extends StorageStrategy {
 
