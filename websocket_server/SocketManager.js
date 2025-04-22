@@ -66,6 +66,7 @@ export default class SocketManager {
 	async init() {
 		await this.setupAdapter()
 		this.setupEventHandlers()
+		Config.printConfig()
 	}
 
 	/**

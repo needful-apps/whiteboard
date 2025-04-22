@@ -65,6 +65,31 @@ const Config = {
 
 	CACHED_TOKEN_TTL: process.env.CACHED_TOKEN_TTL || DEFAULT_CACHED_TOKEN_TTL,
 
+	printConfig() {
+		console.log('\n=== Configuration Settings ===');
+		
+		// Print regular properties
+		Object.keys(this).forEach(key => {
+			if (typeof this[key] !== 'function') {
+				let value = this[key];
+				
+				// Mask sensitive information
+				if (key.includes('SECRET') || key.includes('TOKEN') || key.includes('KEY')) {
+					value = '[SENSITIVE - HIDDEN]';
+				}
+				
+				console.log(`${key.padEnd(30)}: ${value}`);
+			}
+		});
+		
+		// Manually add getter properties
+		console.log('JWT_SECRET_KEY'.padEnd(30) + ': [SENSITIVE - HIDDEN]');
+		console.log('NEXTCLOUD_WEBSOCKET_URL'.padEnd(30) + `: ${this.NEXTCLOUD_WEBSOCKET_URL}`);
+		console.log('NEXTCLOUD_URL'.padEnd(30) + `: ${this.NEXTCLOUD_URL}`);
+		
+		console.log('=== End Configuration Settings ===\n');
+	},
+
 	get JWT_SECRET_KEY() {
 		if (!process.env.JWT_SECRET_KEY) {
 			const newSecret = crypto.randomBytes(32).toString('hex')
